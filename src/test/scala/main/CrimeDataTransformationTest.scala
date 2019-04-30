@@ -1,9 +1,7 @@
 package main
 import org.apache.spark.sql.{DataFrame, Row}
-import org.apache.spark.sql.functions._
 
 class CrimeDataTransformationTest extends TestHelper {
-  import spark.implicits._
 
   lazy val laDF: DataFrame = {
     val fileName = "./src/test/resources/LA.parquet"
@@ -19,52 +17,6 @@ class CrimeDataTransformationTest extends TestHelper {
     val fileName = "./src/test/resources/Dallas.parquet"
     spark.read.parquet(fileName)
   }
-
-//  lazy val laRobberyDF: DataFrame = {
-//    laDF.filter(lower($"crimeCodeDescription") === "robbery")
-//  }
-//
-//  lazy val philadelphiaRobberyDF: DataFrame = {
-//    philadelphiaDF.filter(lower($"ucr_general_description") === "robbery")
-//  }
-//
-//  lazy val dallasRobberyDF: DataFrame = {
-//    dallasDF.filter(lower($"typeOfIncident").contains("robbery") && !lower($"typeOfIncident").contains("burglary"))
-//  }
-//
-//  lazy val robberiesByMonthLADF: DataFrame = {
-//    laRobberyDF.groupBy(month($"timeOccurred") as "month").count.toDF("month","robberies").orderBy("month")
-//  }
-//
-//  lazy val robberiesByMonthPhiladelphiaDF: DataFrame = {
-//    philadelphiaRobberyDF.groupBy(month($"dispatch_date_time") as "month").count.toDF("month","robberies").orderBy("month")
-//  }
-//
-//  lazy val robberiesByMonthDallasDF: DataFrame = {
-//    dallasRobberyDF.groupBy(month($"startingDateTime") as "month").count.toDF("month","robberies").orderBy("month")
-//  }
-//
-//  lazy val combinedRobberiesByMonthDF: DataFrame  = {
-//    robberiesByMonthLADF
-//      .withColumn("city", lit("Los Angeles"))
-//      .union(
-//        robberiesByMonthPhiladelphiaDF.withColumn("city", lit("Philadelphia"))
-//      )
-//      .union(
-//        robberiesByMonthDallasDF.withColumn("city", lit("Dallas"))
-//      )
-//      .select($"city", $"month", $"robberies")
-//  }
-//
-//  lazy val robberyRatesByCityDF: DataFrame  = {
-//    val fileName = "./src/test/resources/CityData.parquet"
-//    val cityDataDF = spark.read.parquet(fileName).withColumnRenamed("city", "cities")
-//    import org.apache.spark.sql.functions.format_number
-//    combinedRobberiesByMonthDF
-//      .join(cityDataDF, $"city" === $"cities")
-//      .withColumn("robberyRate", format_number($"robberies" / $"estPopulation2016", 6))
-//      .select($"city", $"month", $"robberyRate")
-//  }
 
   test("should return total count of philadelphia records") {
     val totalRecords = 0
