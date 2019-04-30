@@ -1,4 +1,4 @@
-package main
+package crimes
 import org.apache.spark.sql.{DataFrame, Row}
 
 class CrimeDataTransformationTest extends TestHelper {
@@ -19,57 +19,64 @@ class CrimeDataTransformationTest extends TestHelper {
   }
 
   test("should return total count of philadelphia records") {
-    val totalRecords = 0
-    assert( totalRecords == 168664)
+    val totalRecords = ???
+    assert(totalRecords == 168664)
   }
 
   test("should return total count of Dallas' crime records") {
-    val totalDallasRecords = 0
-    assert( totalDallasRecords == 99642)
+    val totalDallasRecords = ???
+    assert(totalDallasRecords == 99642)
   }
 
   test("should return total count of crime records in Los Angeles") {
-    val totalLARecords = 0
-    assert( totalLARecords == 217945)
+    val totalLARecords = ???
+    assert(totalLARecords == 217945)
   }
 
   test("should return total robbery count in Los Angeles") {
-    val totalLARobberyDFCount = 0
-    assert( totalLARobberyDFCount == 9048)
+    val totalLARobberyDFCount = ???
+    assert(totalLARobberyDFCount == 9048)
   }
 
   test("should return total robbery count in Philadelphia") {
-    val totalPhiladelphiaRobberyDFCount = 0
-    assert( totalPhiladelphiaRobberyDFCount == 6149)
+    val totalPhiladelphiaRobberyDFCount = ???
+    assert(totalPhiladelphiaRobberyDFCount == 6149)
   }
 
   test("should return total robbery count in Dallas") {
-    val totalDallasRobberyDFCount = 0
-    assert( totalDallasRobberyDFCount == 6824)
+    val totalDallasRobberyDFCount = ???
+    assert(totalDallasRobberyDFCount == 6824)
   }
 
   test("should return the number of robberies in each month in LA"){
-    val la = List.empty
-    assert(la == List(Row(1,719), Row(2,675), Row(3,709), Row(4,713), Row(5,790), Row(6,698), Row(7,826), Row(8,765), Row(9,722), Row(10,814), Row(11,764), Row(12,853)), "the robbery count is incorrect")
-    println("Tests passed!")
+    val la: List[Row] = ???
+
+    val exptectedResults = List(Row(1, 719), Row(2, 675), Row(3, 709), Row(4, 713), Row(5, 790), Row(6, 698),
+      Row(7, 826), Row(8, 765), Row(9, 722), Row(10, 814), Row(11, 764), Row(12, 853))
+    assert(la == exptectedResults, "the robbery count is incorrect")
   }
 
   test("should return the number of robberies in each month in Philadelphia"){
-    val philadelphia  = List.empty
-    assert(philadelphia == List(Row(1,520), Row(2,416), Row(3,432), Row(4,466), Row(5,533), Row(6,509), Row(7,537), Row(8,561), Row(9,514), Row(10,572), Row(11,545), Row(12,544)), "the robberies by month data is incorrect")
-    println("Tests passed!")
+    val philadelphia: List[Row]  = ???
+
+    val exptectedResults = List(Row(1, 520), Row(2, 416), Row(3, 432), Row(4, 466), Row(5, 533), Row(6, 509),
+      Row(7, 537), Row(8, 561), Row(9, 514), Row(10, 572), Row(11, 545), Row(12, 544))
+    assert(philadelphia == exptectedResults, "the robberies by month data is incorrect")
   }
+
   test("should return the number of robberies in each month in Dallas"){
-    val dallas  = List.empty
-    assert(dallas == List(Row(1, 743), Row(2, 435), Row(3,412), Row(4,594), Row(5,615), Row(6,495), Row(7,535), Row(8,627), Row(9,512), Row(10,603), Row(11,589), Row(12,664)), "the robberies by month data is incorrect")
-    println("Tests passed!")
+    val dallas: List[Row]  = ???
+
+    val exptectedResults = List(Row(1, 743), Row(2, 435), Row(3, 412), Row(4, 594), Row(5, 615), Row(6, 495),
+      Row(7, 535), Row(8, 627), Row(9, 512), Row(10, 603), Row(11, 589), Row(12, 664))
+    assert(dallas == exptectedResults, "the robberies by month data is incorrect")
   }
 
   test("should return the combined number of robberies in each month"){
-    lazy val results = List.empty
-    assert(Set(Row("Dallas",11,589), Row("Los Angeles",2,675), Row("Dallas",8,627), Row("Los Angeles",9,722), Row("Los Angeles",1,719), Row("Philadelphia",12,544), Row("Dallas",1,743), Row("Dallas",10,603), Row("Dallas",6,495), Row("Los Angeles",4,713), Row("Philadelphia",2,416), Row("Dallas",4,594), Row("Los Angeles",12,853), Row("Dallas",12,664), Row("Dallas",9,512), Row("Los Angeles",3,709), Row("Dallas",2,435), Row("Los Angeles",7,826), Row("Philadelphia",1,520), Row("Los Angeles",5,790), Row("Philadelphia",7,537), Row("Dallas",5,615), Row("Philadelphia",9,514), Row("Los Angeles",6,698), Row("Philadelphia",8,561), Row("Los Angeles",11,764), Row("Philadelphia",6,509), Row("Dallas",3,412), Row("Philadelphia",5,533), Row("Philadelphia",10,572), Row("Los Angeles",10,814), Row("Los Angeles",8,765), Row("Philadelphia",11,545), Row("Dallas",7,535), Row("Philadelphia",3,432), Row("Philadelphia",4,466)) == results, "the robberies by month data is incorrect")
+    lazy val results: List[Row] = ???
 
-    println("Tests passed!")
+    val exptectedResults = Set(Row("Dallas", 11, 589), Row("Los Angeles", 2, 675), Row("Dallas", 8, 627), Row("Los Angeles", 9, 722), Row("Los Angeles", 1, 719), Row("Philadelphia", 12, 544), Row("Dallas", 1, 743), Row("Dallas", 10, 603), Row("Dallas", 6, 495), Row("Los Angeles", 4, 713), Row("Philadelphia", 2, 416), Row("Dallas", 4, 594), Row("Los Angeles", 12, 853), Row("Dallas", 12, 664), Row("Dallas", 9, 512), Row("Los Angeles", 3, 709), Row("Dallas", 2, 435), Row("Los Angeles", 7, 826), Row("Philadelphia", 1, 520), Row("Los Angeles", 5, 790), Row("Philadelphia", 7, 537), Row("Dallas", 5, 615), Row("Philadelphia", 9, 514), Row("Los Angeles", 6, 698), Row("Philadelphia", 8, 561), Row("Los Angeles", 11, 764), Row("Philadelphia", 6, 509), Row("Dallas", 3, 412), Row("Philadelphia", 5, 533), Row("Philadelphia", 10, 572), Row("Los Angeles", 10, 814), Row("Los Angeles", 8, 765), Row("Philadelphia", 11, 545), Row("Dallas", 7, 535), Row("Philadelphia", 3, 432), Row("Philadelphia", 4, 466))
+    assert(exptectedResults == results, "the robberies by month data is incorrect")
   }
 
   test("should return the robbery rates by city"){
