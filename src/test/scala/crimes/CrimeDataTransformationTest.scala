@@ -1,7 +1,7 @@
 package crimes
 import org.apache.spark.sql.{DataFrame, Row}
 
-class CrimeDataTransformationTest extends TestHelper {
+class CrimeDataTransformationTest extends SparkTest {
 
   lazy val laDF: DataFrame = {
     val fileName = "./src/test/resources/LA.parquet"
