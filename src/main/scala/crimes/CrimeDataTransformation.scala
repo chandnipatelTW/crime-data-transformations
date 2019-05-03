@@ -1,5 +1,6 @@
 package crimes
 
+import org.apache.spark.sql.functions.{col, lit, lower, month}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 object CrimeDataTransformation {
@@ -10,6 +11,7 @@ object CrimeDataTransformation {
       .appName("spark test example")
       .getOrCreate()
   }
+  spark.conf.set("spark.sql.session.timeZone", "UTC")
 
   private val laDF: DataFrame = {
     val fileName = "./src/test/resources/LA.parquet"
@@ -26,58 +28,93 @@ object CrimeDataTransformation {
     spark.read.parquet(fileName)
   }
 
+  private val laRobberyDF: DataFrame = {
+    laDF.filter(lower(col("crimeCodeDescription")) === "robbery")
+  }
+
+  private val philadelphiaRobberyDF: DataFrame = {
+    philadelphiaDF.filter(lower(col("ucr_general_description")) === "robbery")
+  }
+
+  private val dallasRobberyDF: DataFrame = {
+    dallasDF.filter(lower(col("typeOfIncident")).contains("robbery") && !lower(col("typeOfIncident")).contains("burglary"))
+  }
+
+  private val robberiesByMonthLADF: DataFrame = {
+    laRobberyDF.groupBy(month(col("timeOccurred")) as "month").count.toDF("month","robberies").orderBy("month")
+  }
+
+  private val robberiesByMonthPhiladelphiaDF: DataFrame = {
+    philadelphiaRobberyDF.groupBy(month(col("dispatch_date_time")) as "month").count.toDF("month","robberies").orderBy("month")
+  }
+
+  private val robberiesByMonthDallasDF: DataFrame = {
+    dallasRobberyDF.groupBy(month(col("startingDateTime")) as "month").count.toDF("month","robberies").orderBy("month")
+  }
+
+  private val combinedRobberiesByMonthDF: DataFrame  = {
+    robberiesByMonthLADF
+      .withColumn("city", lit("Los Angeles"))
+      .union(
+        robberiesByMonthPhiladelphiaDF.withColumn("city", lit("Philadelphia"))
+      )
+      .union(
+        robberiesByMonthDallasDF.withColumn("city", lit("Dallas"))
+      )
+      .select(col("city"), col("month"), col("robberies"))
+  }
+
+  private val robberyRatesByCityDF: DataFrame  = {
+    val fileName = "./src/test/resources/CityData.parquet"
+    val cityDataDF = spark.read.parquet(fileName).withColumnRenamed("city", "cities")
+    import org.apache.spark.sql.functions.format_number
+    combinedRobberiesByMonthDF
+      .join(cityDataDF, col("city") === col("cities"))
+      .withColumn("robberyRate", format_number(col("robberies") / col("estPopulation2016"), 6))
+      .select(col("city"), col("month"), col("robberyRate"))
+  }
+
   def getCountOfPhiladelphiaRecords(): Long = {
-    // implement the code
-    ???
+    philadelphiaDF.count()
   }
 
   def getCountOfLARecords(): Long = {
-    // implement the code
-    ???
+    laDF.count()
   }
 
   def getCountOfDallasRecords(): Long = {
-    // implement the code
-    ???
+    dallasDF.count()
   }
 
   def getRobberyCountInLa(): Long = {
-    // implement the code
-    ???
+    laRobberyDF.count()
   }
 
   def getRobberyCountInPhiladelphia(): Long = {
-    // implement the code
-    ???
+    philadelphiaRobberyDF.count()
   }
 
   def getRobberyCountInDallas(): Long = {
-    // implement the code
-    ???
+    dallasRobberyDF.count()
   }
 
   def getRobberyDFByMonthInLa(): DataFrame = {
-    // implement the code
-    ???
+    robberiesByMonthLADF
   }
 
   def getRobberyDFByMonthInPhiladelphia(): DataFrame = {
-    // implement the code
-    ???
+    robberiesByMonthPhiladelphiaDF
   }
 
   def getRobberyDFByMonthInDallas(): DataFrame = {
-    // implement the code
-    ???
+    robberiesByMonthDallasDF
   }
 
   def getCombinedRobberyDFByMonth(): DataFrame = {
-    // implement the code
-    ???
+    combinedRobberiesByMonthDF
   }
 
   def getRobberyRatesByCity(): DataFrame = {
-    // implement the code
-    ???
+    robberyRatesByCityDF
   }
 }
