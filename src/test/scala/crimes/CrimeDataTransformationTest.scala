@@ -30,7 +30,7 @@ class CrimeDataTransformationTest extends QueryTest with SharedSQLContext{
   }
 
   test("should return total robbery count in Dallas") {
-    assert(CrimeDataTransformation.getRobberyDFByMonthInDallas()  == 6824)
+    assert(CrimeDataTransformation.getRobberyCountInDallas()  == 6824)
   }
 
   test("should return the number of robberies in each month in LA") {
