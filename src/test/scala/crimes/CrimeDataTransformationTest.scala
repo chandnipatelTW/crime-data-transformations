@@ -38,7 +38,6 @@ class CrimeDataTransformationTest extends QueryTest with SharedSQLContext{
 
 //  Your dataframes must contain 2 columns: month and robberies and use column name:timeOccurred to get the data
   test("should return the number of robberies in each month in LA") {
-//    Hint : Consider using UTC timezone
     val actualNoOfRobberiesInLAPerMonth = CrimeDataTransformation.getRobberyDFByMonthInLa()
     val expectedNoOfRobberiesInLAPerMonth = Seq((1, 719), (2, 675), (3, 709), (4, 713), (5, 790), (6, 698), (7, 826), (8, 765), (9, 722), (10, 814), (11, 764), (12, 853)).toDF()
 
@@ -47,7 +46,6 @@ class CrimeDataTransformationTest extends QueryTest with SharedSQLContext{
 
   //  Your dataframes must contain 2 columns: month and robberies and use column name:dispatch_date_time to get the data
   test("should return the number of robberies in each month in Philadelphia") {
-    //    Hint : Consider using UTC timezone
     val actualNoOfRobberiesInPhilPerMonth = CrimeDataTransformation.getRobberyDFByMonthInPhiladelphia()
     val expectedNoOfRobberiesInPhilPerMonth = Seq((1, 520), (2, 416), (3, 432), (4, 466), (5, 533), (6, 509), (7, 537), (8, 561), (9, 514), (10, 572), (11, 545), (12, 544)).toDF()
 
@@ -56,7 +54,6 @@ class CrimeDataTransformationTest extends QueryTest with SharedSQLContext{
 
   //  Your dataframes must contain 2 columns: month and robberies and use column name:startingDateTime to get the data
   test("should return the number of robberies in each month in Dallas") {
-    //    Hint : Consider using UTC timezone
     val actualNoOfRobberiesInDallasPerMonth = CrimeDataTransformation.getRobberyDFByMonthInDallas()
     val expectedNoOfRobberiesInDallasPerMonth = Seq((1, 743), (2, 435), (3, 412), (4, 594), (5, 615), (6, 495), (7, 535), (8, 627), (9, 512), (10, 603), (11, 589), (12, 664)).toDF()
 
@@ -66,13 +63,30 @@ class CrimeDataTransformationTest extends QueryTest with SharedSQLContext{
   // Your dataframes should contain 3 columns: city, month and robbery
   test("should return the combined number of robberies in each month for each city") {
     val ActualCombinedNumberOfRobberiesPerMonth = CrimeDataTransformation.getCombinedRobberyDFByMonth()
-    val expectedCombinedNumberOfRobberiesPerMonth = Seq(("Dallas", 11, 589), ("Los Angeles", 2, 675), ("Dallas", 8, 627), ("Los Angeles", 9, 722), ("Los Angeles", 1, 719), ("Philadelphia", 12, 544), ("Dallas", 1, 743), ("Dallas", 10, 603), ("Dallas", 6, 495), ("Los Angeles", 4, 713), ("Philadelphia", 2, 416), ("Dallas", 4, 594), ("Los Angeles", 12, 853), ("Dallas", 12, 664), ("Dallas", 9, 512), ("Los Angeles", 3, 709), ("Dallas", 2, 435), ("Los Angeles", 7, 826), ("Philadelphia", 1, 520), ("Los Angeles", 5, 790), ("Philadelphia", 7, 537), ("Dallas", 5, 615), ("Philadelphia", 9, 514), ("Los Angeles", 6, 698), ("Philadelphia", 8, 561), ("Los Angeles", 11, 764), ("Philadelphia", 6, 509), ("Dallas", 3, 412), ("Philadelphia", 5, 533), ("Philadelphia", 10, 572), ("Los Angeles", 10, 814), ("Los Angeles", 8, 765), ("Philadelphia", 11, 545), ("Dallas", 7, 535), ("Philadelphia", 3, 432), ("Philadelphia", 4, 466)).toDF()
+    val expectedCombinedNumberOfRobberiesPerMonth = Seq(
+      ("Dallas", 1, 743),("Dallas", 2, 435),("Dallas", 3, 412),("Dallas", 4, 594),("Dallas", 5, 615),("Dallas", 6, 495),("Dallas", 7, 535),
+      ("Dallas", 8, 627),("Dallas", 9, 512),("Dallas", 10, 603),("Dallas", 11, 589),("Dallas", 12, 664),
+      ("Los Angeles", 1, 719),("Los Angeles", 2, 675),("Los Angeles", 3, 709),("Los Angeles", 4, 713),("Los Angeles", 5, 790),("Los Angeles", 6, 698),
+      ("Los Angeles", 7, 826),("Los Angeles", 8, 765),("Los Angeles", 9, 722),("Los Angeles", 10, 814),("Los Angeles", 11, 764),("Los Angeles", 12, 853),
+      ("Philadelphia", 1, 520),
+      ("Philadelphia", 2, 416),
+      ("Philadelphia", 3, 432),
+      ("Philadelphia", 4, 466),
+      ("Philadelphia", 5, 533),
+      ("Philadelphia", 6, 509),
+      ("Philadelphia", 7, 537),
+      ("Philadelphia", 8, 561),
+      ("Philadelphia", 9, 514),
+      ("Philadelphia", 10, 572),
+      ("Philadelphia", 11, 545),
+      ("Philadelphia", 12, 544)
+    ).toDF()
 
-    checkAnswer(ActualCombinedNumberOfRobberiesPerMonth, expectedCombinedNumberOfRobberiesPerMonth)
+    checkAnswer(ActualCombinedNumberOfRobberiesPerMonth.orderBy("city"), expectedCombinedNumberOfRobberiesPerMonth)
   }
 
   test("should return the robbery rates by city") {
-    val actualRobberyRatesByCity = CrimeDataTransformation.getRobberyRatesByCity()
+    val actualRobberyRatesByCity = CrimeDataTransformation.getRobberyRatesByCity().orderBy("city")
     val expectedRobberyRatesByCity = Seq(
       ("Dallas",  1, "0.000564"),
       ("Dallas",  2, "0.000330"),
