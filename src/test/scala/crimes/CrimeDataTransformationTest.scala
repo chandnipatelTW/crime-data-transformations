@@ -6,6 +6,7 @@ import org.apache.spark.sql.{QueryTest }
 class CrimeDataTransformationTest extends QueryTest with SharedSQLContext{
 
   import testImplicits._
+
   test("should return total count of philadelphia records") {
     val philadelphiaCount = CrimeDataTransformation.getCountOfPhiladelphiaRecords()
     assert(philadelphiaCount == 168664)
@@ -21,6 +22,8 @@ class CrimeDataTransformationTest extends QueryTest with SharedSQLContext{
     assert(laCount == 217945)
   }
 
+//  Explore the data for the three cities until you understand how each city records robbery information. You need to consider only robbery
+
   test("should return total robbery count in Los Angeles") {
     assert(CrimeDataTransformation.getRobberyCountInLa() == 9048)
   }
@@ -33,6 +36,7 @@ class CrimeDataTransformationTest extends QueryTest with SharedSQLContext{
     assert(CrimeDataTransformation.getRobberyCountInDallas()  == 6824)
   }
 
+//  Your dataframes must contain 2 columns: month and robberies and use column name:timeOccurred to get the data
   test("should return the number of robberies in each month in LA") {
 //    Hint : Consider using UTC timezone
     val actualNoOfRobberiesInLAPerMonth = CrimeDataTransformation.getRobberyDFByMonthInLa()
@@ -41,6 +45,7 @@ class CrimeDataTransformationTest extends QueryTest with SharedSQLContext{
     checkAnswer(actualNoOfRobberiesInLAPerMonth, expectedNoOfRobberiesInLAPerMonth)
   }
 
+  //  Your dataframes must contain 2 columns: month and robberies and use column name:dispatch_date_time to get the data
   test("should return the number of robberies in each month in Philadelphia") {
     //    Hint : Consider using UTC timezone
     val actualNoOfRobberiesInPhilPerMonth = CrimeDataTransformation.getRobberyDFByMonthInPhiladelphia()
@@ -49,6 +54,7 @@ class CrimeDataTransformationTest extends QueryTest with SharedSQLContext{
     checkAnswer(actualNoOfRobberiesInPhilPerMonth, expectedNoOfRobberiesInPhilPerMonth)
   }
 
+  //  Your dataframes must contain 2 columns: month and robberies and use column name:startingDateTime to get the data
   test("should return the number of robberies in each month in Dallas") {
     //    Hint : Consider using UTC timezone
     val actualNoOfRobberiesInDallasPerMonth = CrimeDataTransformation.getRobberyDFByMonthInDallas()
@@ -57,6 +63,7 @@ class CrimeDataTransformationTest extends QueryTest with SharedSQLContext{
     checkAnswer(actualNoOfRobberiesInDallasPerMonth, expectedNoOfRobberiesInDallasPerMonth)
   }
 
+  // Your dataframes should contain 3 columns: city, month and robbery
   test("should return the combined number of robberies in each month for each city") {
     val ActualCombinedNumberOfRobberiesPerMonth = CrimeDataTransformation.getCombinedRobberyDFByMonth()
     val expectedCombinedNumberOfRobberiesPerMonth = Seq(("Dallas", 11, 589), ("Los Angeles", 2, 675), ("Dallas", 8, 627), ("Los Angeles", 9, 722), ("Los Angeles", 1, 719), ("Philadelphia", 12, 544), ("Dallas", 1, 743), ("Dallas", 10, 603), ("Dallas", 6, 495), ("Los Angeles", 4, 713), ("Philadelphia", 2, 416), ("Dallas", 4, 594), ("Los Angeles", 12, 853), ("Dallas", 12, 664), ("Dallas", 9, 512), ("Los Angeles", 3, 709), ("Dallas", 2, 435), ("Los Angeles", 7, 826), ("Philadelphia", 1, 520), ("Los Angeles", 5, 790), ("Philadelphia", 7, 537), ("Dallas", 5, 615), ("Philadelphia", 9, 514), ("Los Angeles", 6, 698), ("Philadelphia", 8, 561), ("Los Angeles", 11, 764), ("Philadelphia", 6, 509), ("Dallas", 3, 412), ("Philadelphia", 5, 533), ("Philadelphia", 10, 572), ("Los Angeles", 10, 814), ("Los Angeles", 8, 765), ("Philadelphia", 11, 545), ("Dallas", 7, 535), ("Philadelphia", 3, 432), ("Philadelphia", 4, 466)).toDF()
