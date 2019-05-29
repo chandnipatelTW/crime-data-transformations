@@ -7,12 +7,12 @@ class CrimeDataTransformationTest extends QueryTest with SharedSQLContext{
 
   import testImplicits._
 
-  test("should return total count of philadelphia records") {
+  test("should return total count of crime records in Philadelphia") {
     val philadelphiaCount = CrimeDataTransformation.getCountOfPhiladelphiaRecords()
     assert(philadelphiaCount == 168664)
   }
 
-  test("should return total count of Dallas' crime records") {
+  test("should return total count of crime records in Dallas") {
     val dallasCount = CrimeDataTransformation.getCountOfDallasRecords()
     assert(dallasCount == 99642)
   }
