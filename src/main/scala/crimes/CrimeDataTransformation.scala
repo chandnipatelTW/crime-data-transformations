@@ -37,22 +37,38 @@ object CrimeDataTransformation {
   }
 
   private val dallasRobberyDF: DataFrame = {
-    dallasDF.filter(lower(col("typeOfIncident")).contains("robbery") && !lower(col("typeOfIncident")).contains("burglary"))
+    dallasDF.filter(
+      lower(col("typeOfIncident")).contains("robbery")
+        &&
+        !lower(col("typeOfIncident")).contains("burglary")
+    )
   }
 
   private val robberiesByMonthLADF: DataFrame = {
-    laRobberyDF.groupBy(month(col("timeOccurred")) as "month").count.toDF("month","robberies").orderBy("month")
+    laRobberyDF
+      .groupBy(month(col("timeOccurred")) as "month")
+      .count
+      .toDF("month", "robberies")
+      .orderBy("month")
   }
 
   private val robberiesByMonthPhiladelphiaDF: DataFrame = {
-    philadelphiaRobberyDF.groupBy(month(col("dispatch_date_time")) as "month").count.toDF("month","robberies").orderBy("month")
+    philadelphiaRobberyDF
+      .groupBy(month(col("dispatch_date_time")) as "month")
+      .count
+      .toDF("month", "robberies")
+      .orderBy("month")
   }
 
   private val robberiesByMonthDallasDF: DataFrame = {
-    dallasRobberyDF.groupBy(month(col("startingDateTime")) as "month").count.toDF("month","robberies").orderBy("month")
+    dallasRobberyDF
+      .groupBy(month(col("startingDateTime")) as "month")
+      .count
+      .toDF("month", "robberies")
+      .orderBy("month")
   }
 
-  private val combinedRobberiesByMonthDF: DataFrame  = {
+  private val combinedRobberiesByMonthDF: DataFrame = {
     robberiesByMonthLADF
       .withColumn("city", lit("Los Angeles"))
       .union(
@@ -64,7 +80,7 @@ object CrimeDataTransformation {
       .select(col("city"), col("month"), col("robberies"))
   }
 
-  private val robberyRatesByCityDF: DataFrame  = {
+  private val robberyRatesByCityDF: DataFrame = {
     val fileName = "./src/test/resources/CityData.parquet"
     val cityDataDF = spark.read.parquet(fileName).withColumnRenamed("city", "cities")
     import org.apache.spark.sql.functions.format_number
