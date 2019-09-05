@@ -1,12 +1,13 @@
 # Basic Repo for working with Spark + Scala
 
-The purpose of this repo is to gain insights about different types of data.
+The purpose of this repo is to gain insights about crime data from various sources.
 
-There are a number of Parquet files containing 2016 crime data from four United States cities in resources folder::
+There are a number of Parquet files containing 2016 crime data from four United States cities in resources folder:
 
-Los Angeles
-Philadelphia
-Dallas
+- Los Angeles
+- Philadelphia
+- Dallas
+
 The data is cleaned up a little, but has not been normalized. Each city reports crime data slightly differently,
 so examine the data for each city to determine how to query it properly.
 
@@ -25,5 +26,5 @@ Please make sure you have the following installed
 * Test: sbt test
 
 ## Goal
-* Fix the test.
+* Fix the tests.
 
